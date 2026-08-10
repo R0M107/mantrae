@@ -110,7 +110,7 @@
 	</div>
 
 	<!-- TLS Passthrough -->
-	{#if config.tls}
+	<!-- {#if config.tls} -->
 		<div class="flex items-center justify-between rounded-lg border p-3">
 			<div class="space-y-1">
 				<Label class="text-sm">TLS Passthrough</Label>
@@ -133,7 +133,7 @@
 				}}
 			/>
 		</div>
-	{/if}
+	<!-- {/if} -->
 
 
 	<div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-2">
