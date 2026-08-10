@@ -1,15 +1,13 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: write
   packages: write
   id-token: write
-
+  
 jobs:
   release:
     runs-on: ubuntu-latest
