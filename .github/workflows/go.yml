@@ -55,4 +55,4 @@ jobs:
         env:
           KO_DOCKER_REPO: ghcr.io/${{ github.repository_owner }}/mantrae
         run: |
-          ko build . --bare --tags latest
+          ko build ./cmd --bare --tags latest
