@@ -109,36 +109,76 @@
 		/>
 	</div>
 
+	<!-- TLS Passthrough -->
+	{#if config.tls}
+		<div class="flex items-center justify-between rounded-lg border p-3">
+			<div class="space-y-1">
+				<Label class="text-sm">TLS Passthrough</Label>
+				<p class="text-xs text-muted-foreground">
+					Forward TLS traffic without terminating encryption
+				</p>
+			</div>
+
+			<CustomSwitch
+				checked={config.tls.passthrough ?? false}
+				onCheckedChange={(checked) => {
+					if (!config.tls) config.tls = {} as RouterTCPTLSConfig;
+
+					config.tls.passthrough = checked;
+
+					// Remove certResolver because it conflicts with passthrough
+					if (checked) {
+						delete config.tls.certResolver;
+					}
+				}}
+			/>
+		</div>
+	{/if}
+
+
 	<div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-2">
 		<!-- TLS Configuration -->
-		<div class="flex flex-col gap-2 sm:col-span-2">
-			<Label for="certResolver" class="mr-2">Certificate Resolver</Label>
+		<div
+			class="flex flex-col gap-2 sm:col-span-2"
+			class:opacity-50={config.tls?.passthrough}
+		>
+			<Label for="certResolver" class="mr-2">
+				Certificate Resolver
+			</Label>
+
 			<div class="col-span-3">
 				<Input
 					value={config.tls?.certResolver}
 					name="certResolver"
 					placeholder="letsencrypt"
+					disabled={config.tls?.passthrough}
 					class="truncate"
 					oninput={(e) => {
 						const input = e.target as HTMLInputElement;
-						if (!input.value) {
-							delete config.tls;
-							return;
+
+						if (!config.tls) {
+							config.tls = {} as RouterTCPTLSConfig;
 						}
 
-						if (!config.tls) config.tls = {} as RouterTCPTLSConfig;
-						config.tls.certResolver = input.value;
+						config.tls.certResolver = input.value || undefined;
 					}}
 				/>
+
 				<div class="flex flex-wrap gap-1">
 					{#each certResolvers as resolver (resolver)}
 						{#if resolver !== config.tls?.certResolver}
 							<Badge
-								onclick={() => {
-									if (!config.tls) config.tls = {} as RouterTCPTLSConfig;
-									if (resolver) config.tls.certResolver = resolver.toString();
-								}}
 								class="mt-1 cursor-pointer"
+								class:opacity-50={config.tls?.passthrough}
+								onclick={() => {
+									if (config.tls?.passthrough) return;
+
+									if (!config.tls) {
+										config.tls = {} as RouterTCPTLSConfig;
+									}
+
+									config.tls.certResolver = resolver.toString();
+								}}
 							>
 								{resolver}
 							</Badge>
