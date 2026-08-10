@@ -33,7 +33,7 @@ jobs:
       - name: Build frontend
         working-directory: web/ui
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install
           pnpm build
 
       - name: Setup Go
