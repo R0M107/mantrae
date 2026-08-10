@@ -168,8 +168,7 @@
 					{#each certResolvers as resolver (resolver)}
 						{#if resolver !== config.tls?.certResolver}
 							<Badge
-								class="mt-1 cursor-pointer"
-								class:opacity-50={config.tls?.passthrough}
+								class={`mt-1 cursor-pointer ${config.tls?.passthrough ? 'opacity-50' : ''}`}
 								onclick={() => {
 									if (config.tls?.passthrough) return;
 
